@@ -71,8 +71,8 @@ WHERE total_cases IS NOT NULL AND continent IS NOT NULL
 
 --Total Population vs Vaccinations
 --Shows % of Population that has recieved at least one COVID Vaccine
-SELECT
-	dea.continent, dea.location, dea.date, dea.population, vac.new_people_vaccinated_smoothed, SUM(CONVERT(bigint, vac.new_people_vaccinated_smoothed)) OVER (Partition by dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_people_vaccinated_smoothed, 
+	SUM(CONVERT(bigint, vac.new_people_vaccinated_smoothed)) OVER (Partition by dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
 FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
@@ -84,8 +84,8 @@ ORDER BY 2,3
 WITH PopvsVac (continent, location, date, population, new_people_vaccinated_smoothed, RollingPeopleVaccinated)
 AS 
 (
-SELECT
-	dea.continent, dea.location, dea.date, dea.population, vac.new_people_vaccinated_smoothed, SUM(CONVERT(bigint, vac.new_people_vaccinated_smoothed)) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
+SELECT	dea.continent, dea.location, dea.date, dea.population, vac.new_people_vaccinated_smoothed, 
+	SUM(CONVERT(bigint, vac.new_people_vaccinated_smoothed)) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
 FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
@@ -107,28 +107,26 @@ new_people_vaccinated_smoothed numeric,
 RollingPeopleVaccinated numeric
 )
 INSERT INTO #PercentPopulationVaccinated
-SELECT
-	dea.continent, dea.location, dea.date, dea.population, vac.new_people_vaccinated_smoothed, SUM(CONVERT(bigint, vac.new_people_vaccinated_smoothed)) OVER (Partition by dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_people_vaccinated_smoothed, 
+	SUM(CONVERT(bigint, vac.new_people_vaccinated_smoothed)) OVER (Partition by dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
 FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
 	AND dea.date = vac.date
 WHERE dea.continent IS NOT NULL AND dea.total_cases IS NOT NULL
 
-SELECT *,
-	location, (RollingPeopleVaccinated/population)*100 AS PercentPopulationVaccinated
+SELECT *, location, (RollingPeopleVaccinated/population)*100 AS PercentPopulationVaccinated
 FROM #PercentPopulationVaccinated
 
 
-SELECT
-	*, (RollingPeopleVaccinated/population)*100 AS PercentPopulationVaccinated
+SELECT *, (RollingPeopleVaccinated/population)*100 AS PercentPopulationVaccinated
 FROM #PercentPopulationVaccinated
 
 
 --CREATE VIEW to store data for later visualizations
 CREATE VIEW PercentPopulationVaccinated AS
-SELECT
-	dea.continent, dea.location, dea.date, dea.population, vac.new_people_vaccinated_smoothed, SUM(CONVERT(bigint, vac.new_people_vaccinated_smoothed)) OVER (Partition by dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
+SELECT	dea.continent, dea.location, dea.date, dea.population, vac.new_people_vaccinated_smoothed, 
+	SUM(CONVERT(bigint, vac.new_people_vaccinated_smoothed)) OVER (Partition by dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
 FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
