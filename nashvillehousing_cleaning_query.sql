@@ -1,5 +1,5 @@
 /*
-CLeaning Data in SQL Queries
+CLeaning Data in SQL Queries in SQL Server
 */
 
 --Backup Original Data 
