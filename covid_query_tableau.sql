@@ -1,5 +1,5 @@
 /*
-Queries used for Tableau Project
+Queries used for Tableau Project in SQL Server
 */
 
 --Global Numbers
