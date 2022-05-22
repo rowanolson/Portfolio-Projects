@@ -1,5 +1,5 @@
 /*
-COVID19 Data Exploration
+COVID19 Data Exploration in SQL Server
 Skills used: Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views, Converting Data Types
 */
 
